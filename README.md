@@ -68,7 +68,16 @@ Game logic is framework-free; React only owns the casing and menus.
 - **Game B** — faster and busier, and jumpers snag on the palms before dropping
   again after a randomised delay.
 
-## Deploy
+## Deploy to Vercel
 
-`npm run build` produces a static-friendly build ready for Vercel.
-Supabase-backed global leaderboards are not wired up yet; high scores are local.
+1. Push the repo to GitHub ([siongchai/gw-parachute](https://github.com/siongchai/gw-parachute)).
+2. Sign in at [vercel.com](https://vercel.com) with GitHub.
+3. **Add New → Project**, import **gw-parachute**, and keep the defaults (Next.js, `npm run build`).
+4. Click **Deploy**. Vercel assigns a URL like `https://gw-parachute.vercel.app`.
+5. Future pushes to `main` redeploy automatically.
+
+No environment variables are required yet — high scores stay in the browser (`localStorage`).
+
+**CLI (optional):** `npm i -g vercel`, then run `vercel` and `vercel --prod` from the project root.
+
+Verify locally first with `npm run build` if the Vercel build fails.
