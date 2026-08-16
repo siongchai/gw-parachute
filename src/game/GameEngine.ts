@@ -299,6 +299,11 @@ export class GameEngine {
 
     this.sprites.drawScore(ctx, this.score, HUD.scoreX, HUD.scoreY, HUD.digitAdvance);
 
+    if (this.playing || this.gameOver) {
+      const modeId = this.mode === "A" ? "label_game_a" : "label_game_b";
+      this.sprites.draw(ctx, modeId, HUD.modeLabelX, HUD.modeLabelY);
+    }
+
     if (this.misses > 0) {
       const label = this.sprites.size("label_miss");
       this.sprites.draw(
