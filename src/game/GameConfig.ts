@@ -88,7 +88,7 @@ export const HUD = {
   missIconAdvance: 11,
   /** Bottom-left corner — GAME A / GAME B mode indicator. */
   modeLabelX: 6,
-  modeLabelY: GAME_HEIGHT - 11,
+  modeLabelY: GAME_HEIGHT - 18,
 } as const;
 
 export const MAX_MISSES = 3;
