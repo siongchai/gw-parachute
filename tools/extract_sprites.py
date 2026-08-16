@@ -66,6 +66,32 @@ def save(img, category, name):
     print(f"  {p} {img.size[0]}x{img.size[1]}")
 
 
+# Crisp 5×7 caps for HUD labels (sheet crops blur to noise at LCD size).
+_PIXEL_FONT = {
+    "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "B": ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
+    "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    "G": ["01111", "10000", "10000", "10111", "10001", "10001", "01110"],
+    "M": ["10001", "11011", "10101", "10001", "10001", "10001", "10001"],
+    " ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
+}
+
+
+def pixel_label(text: str, letter_gap: int = 1) -> Image.Image:
+    width = len(text) * 5 + max(0, len(text) - 1) * letter_gap
+    out = Image.new("RGBA", (width, 7), (0, 0, 0, 0))
+    px = out.load()
+    x = 0
+    for i, ch in enumerate(text):
+        rows = _PIXEL_FONT[ch]
+        for y, row in enumerate(rows):
+            for cx, bit in enumerate(row):
+                if bit == "1":
+                    px[x + cx, y] = (0, 0, 0, 255)
+        x += 5 + letter_gap
+    return out
+
+
 # ── Helicopter ──────────────────────────────────────────────────────────────
 HELI = [
     (22, 68, 154, 147),
@@ -200,8 +226,9 @@ def main():
     print("ui")
     for i, b in enumerate(MISS_ICONS):
         save(extract(b, width=9), "ui", f"miss_icon_{i}")
-    save(extract(LABEL_GAME_A, height=7), "ui", "label_game_a")
-    save(extract(LABEL_GAME_B, height=7), "ui", "label_game_b")
+    # Sheet crops for GAME A/B are too soft at LCD size — bake crisp 5x7 labels.
+    save(pixel_label("GAME A"), "ui", "label_game_a")
+    save(pixel_label("GAME B"), "ui", "label_game_b")
     save(extract(LABEL_MISS, height=8), "ui", "label_miss")
 
     print("digits")
