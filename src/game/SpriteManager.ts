@@ -24,6 +24,27 @@ export const SPRITE_MANIFEST = {
   spin_4: "parachutist/spin_4.png",
   spin_5: "parachutist/spin_5.png",
 
+  pathL_0: "path/pathL_0.png",
+  pathL_1: "path/pathL_1.png",
+  pathL_2: "path/pathL_2.png",
+  pathL_3: "path/pathL_3.png",
+  pathL_4: "path/pathL_4.png",
+  pathL_5: "path/pathL_5.png",
+  pathL_6: "path/pathL_6.png",
+
+  pathC_0: "path/pathC_0.png",
+  pathC_1: "path/pathC_1.png",
+  pathC_2: "path/pathC_2.png",
+  pathC_3: "path/pathC_3.png",
+  pathC_4: "path/pathC_4.png",
+  pathC_5: "path/pathC_5.png",
+
+  pathR_0: "path/pathR_0.png",
+  pathR_1: "path/pathR_1.png",
+  pathR_2: "path/pathR_2.png",
+  pathR_3: "path/pathR_3.png",
+  pathR_4: "path/pathR_4.png",
+
   hang_0: "parachutist/hang_0.png",
   hang_1: "parachutist/hang_1.png",
   hang_2: "parachutist/hang_2.png",

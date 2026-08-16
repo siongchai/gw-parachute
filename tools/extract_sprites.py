@@ -77,18 +77,32 @@ _PIXEL_FONT = {
 }
 
 
-def pixel_label(text: str, letter_gap: int = 1) -> Image.Image:
-    width = len(text) * 5 + max(0, len(text) - 1) * letter_gap
-    out = Image.new("RGBA", (width, 7), (0, 0, 0, 0))
+# Tiny 3×5 caps for the LCD GAME A/B corner label.
+_PIXEL_FONT_3X5 = {
+    "A": ["010", "101", "111", "101", "101"],
+    "B": ["110", "101", "110", "101", "110"],
+    "E": ["111", "100", "110", "100", "111"],
+    "G": ["011", "100", "101", "101", "011"],
+    "M": ["101", "111", "101", "101", "101"],
+    " ": ["000", "000", "000", "000", "000"],
+}
+
+
+def pixel_label(text, letter_gap=1, font=None):
+    glyphs = font or _PIXEL_FONT
+    gw = len(next(iter(glyphs.values()))[0])
+    gh = len(next(iter(glyphs.values())))
+    width = len(text) * gw + max(0, len(text) - 1) * letter_gap
+    out = Image.new("RGBA", (width, gh), (0, 0, 0, 0))
     px = out.load()
     x = 0
-    for i, ch in enumerate(text):
-        rows = _PIXEL_FONT[ch]
+    for ch in text:
+        rows = glyphs[ch]
         for y, row in enumerate(rows):
             for cx, bit in enumerate(row):
                 if bit == "1":
                     px[x + cx, y] = (0, 0, 0, 255)
-        x += 5 + letter_gap
+        x += gw + letter_gap
     return out
 
 
@@ -226,9 +240,9 @@ def main():
     print("ui")
     for i, b in enumerate(MISS_ICONS):
         save(extract(b, width=9), "ui", f"miss_icon_{i}")
-    # Sheet crops for GAME A/B are too soft at LCD size — bake crisp 5x7 labels.
-    save(pixel_label("GAME A"), "ui", "label_game_a")
-    save(pixel_label("GAME B"), "ui", "label_game_b")
+    # Tiny 3x5 GAME A/B labels sit in the bottom-left LCD corner.
+    save(pixel_label("GAME A", font=_PIXEL_FONT_3X5), "ui", "label_game_a")
+    save(pixel_label("GAME B", font=_PIXEL_FONT_3X5), "ui", "label_game_b")
     save(extract(LABEL_MISS, height=8), "ui", "label_miss")
 
     print("digits")

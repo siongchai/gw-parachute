@@ -20,7 +20,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 | ← → or A / D | Move the boat |
 | P or Esc | Pause |
 | GAME A / GAME B pills | Start a game |
-| TIME pill | Menu / high scores |
+| MENU pill | Menu / high scores |
 
 ## Sprites
 

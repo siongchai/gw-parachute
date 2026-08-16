@@ -1,9 +1,9 @@
 /**
  * Logical canvas resolution.
- * Matches the LCD aspect of the reference handheld mockup (328x284 -> 164x142).
+ * Wide-screen LCD; height trimmed so the final drop step lands on the boat.
  */
 export const GAME_WIDTH = 164;
-export const GAME_HEIGHT = 142;
+export const GAME_HEIGHT = 117;
 
 /** Palette taken from the supplied sprite asset sheet. */
 export const COLORS = {
@@ -15,7 +15,7 @@ export const COLORS = {
 } as const;
 
 /** Waterline: wave rows start here and fill to the bottom of the screen. */
-export const WATER_Y = 112;
+export const WATER_Y = 87;
 
 /**
  * Three fixed LCD columns — left, centre, right — matching the reference mockup.
@@ -34,7 +34,7 @@ export const BOAT = {
   width: 40,
   height: 25,
   /** Top of the boat sprite; hull rides just under the waterline. */
-  y: 93,
+  y: 71,
   /** Rowing animation after each column step. */
   rowAnimMs: 240,
   rowFrameMs: 90,
@@ -87,8 +87,8 @@ export const HUD = {
   missIconY: GAME_HEIGHT - 14,
   missIconAdvance: 11,
   /** Bottom-left corner — GAME A / GAME B mode indicator. */
-  modeLabelX: 6,
-  modeLabelY: GAME_HEIGHT - 18,
+  modeLabelX: 4,
+  modeLabelY: GAME_HEIGHT - 7,
 } as const;
 
 export const MAX_MISSES = 3;

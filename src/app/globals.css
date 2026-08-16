@@ -220,7 +220,7 @@ body {
 .screen {
   position: relative;
   width: 100%;
-  aspect-ratio: 164 / 142;
+  aspect-ratio: 164 / 117;
   margin: 0 auto;
   border-radius: 3px;
   overflow: hidden;
@@ -261,6 +261,17 @@ body {
   letter-spacing: 0.07em;
   color: var(--ink);
   margin-bottom: 2px;
+}
+
+.mode-item-solo {
+  grid-template-columns: auto;
+  justify-items: center;
+}
+
+.mode-item-solo .mode-label {
+  text-align: center;
+  /* Offset trailing letter-spacing so the word sits on the pill. */
+  margin-right: -0.07em;
 }
 
 .pill {
@@ -715,6 +726,18 @@ body {
   gap: 4cqw;
 }
 
+/* Main menu — no title; buttons spread to fill the LCD from the top. */
+.panel.menu {
+  justify-content: flex-start;
+  padding-top: 2.2cqw;
+  padding-bottom: 1.6cqw;
+}
+
+.panel.menu .panel-buttons {
+  flex: 1;
+  justify-content: space-evenly;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -830,7 +853,7 @@ body {
   .screen {
     width: 100%;
     height: auto;
-    aspect-ratio: 164 / 142;
+    aspect-ratio: 164 / 117;
     max-width: none;
     max-height: none;
   }
@@ -960,8 +983,8 @@ body {
   }
 
   .handheld {
-    --lcd-h: min(calc(100svh - 120px), calc((100vw - 48px) / (164 / 142)));
-    width: min(calc(100vw - 8px), calc(var(--lcd-h) * (164 / 142) + 240px));
+    --lcd-h: min(calc(100svh - 120px), calc((100vw - 48px) / (164 / 117)));
+    width: min(calc(100vw - 8px), calc(var(--lcd-h) * (164 / 117) + 240px));
     max-width: calc(100vw - 8px);
     margin-inline: auto;
   }
@@ -1011,7 +1034,7 @@ body {
 
   /* ~358×310 LCD on 932×430 viewport */
   .screen {
-    aspect-ratio: 164 / 142;
+    aspect-ratio: 164 / 117;
     height: var(--lcd-h);
     width: auto;
     max-width: 100%;

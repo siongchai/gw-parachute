@@ -20,12 +20,7 @@ export function MainMenu({
   onToggleSound,
 }: Props) {
   return (
-    <div className="panel">
-      <h1 className="panel-title">
-        PARACHUTE
-        <span>RESCUE</span>
-      </h1>
-
+    <div className="panel menu">
       <div className="rule-with-icon">
         <span className="rule" />
         <PixelIcon name="parachute" className="rule-icon" />

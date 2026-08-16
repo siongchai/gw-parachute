@@ -83,8 +83,8 @@ export function Handheld({
                 <i className="led" /> ACL
               </span>
             </div>
-            <div className="mode-item">
-              <span className="mode-label">TIME</span>
+            <div className="mode-item mode-item-solo">
+              <span className="mode-label">MENU</span>
               <button type="button" className="pill" onClick={onTime} aria-label="Menu" />
             </div>
           </div>
