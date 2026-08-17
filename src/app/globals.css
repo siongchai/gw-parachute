@@ -220,7 +220,7 @@ body {
 .screen {
   position: relative;
   width: 100%;
-  aspect-ratio: 164 / 117;
+  aspect-ratio: 164 / 108;
   margin: 0 auto;
   border-radius: 3px;
   overflow: hidden;
@@ -508,6 +508,11 @@ body {
   box-shadow: none;
 }
 
+.btn:disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .btn.wide {
   width: 100%;
   margin-top: auto;
@@ -566,18 +571,49 @@ body {
   color: var(--ink);
 }
 
-/* Game over */
+/* Game over — compact so the shorter LCD does not clip or scroll. */
+.panel.gameover {
+  justify-content: space-between;
+  gap: 1cqw;
+  padding: 1.8cqw 4cqw 2cqw;
+  overflow: hidden;
+  --lcd-digit-h: 6.4cqw;
+}
+
+.panel.gameover .rule-heading {
+  width: 94%;
+  gap: 6px;
+}
+
+.panel.gameover .rule-heading h2 {
+  font-size: 5cqw;
+  letter-spacing: 0.08em;
+}
+
+.panel.gameover .new-best {
+  font-size: 3.2cqw;
+}
+
 .result-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  gap: 3cqw;
+}
+
+.result-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6cqw;
+  gap: 0.4cqw;
 }
 
 .result-label {
-  font-size: 3.6cqw;
+  font-size: 3cqw;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: var(--ink-soft);
 }
 
@@ -597,12 +633,16 @@ body {
 }
 
 .lcd-digits {
+  --lcd-digit-h: 8.4cqw;
   display: inline-flex;
-  gap: 2px;
+  gap: 0.4cqw;
+  height: var(--lcd-digit-h);
 }
 
 .lcd-digit {
   display: block;
+  height: var(--lcd-digit-h);
+  width: calc(var(--lcd-digit-h) * 11 / 16);
   background: currentColor;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -623,11 +663,31 @@ body {
 .miss-row {
   display: flex;
   align-items: center;
-  gap: 2cqw;
-  font-size: 3.6cqw;
+  gap: 1.6cqw;
+  font-size: 3cqw;
   font-weight: 800;
   letter-spacing: 0.12em;
   color: var(--ink);
+}
+
+.panel.gameover .miss-row {
+  font-size: 2.8cqw;
+}
+
+.panel.gameover .miss-sprite {
+  width: 3.6cqw;
+  height: 4cqw;
+  min-width: 8px;
+  min-height: 9px;
+}
+
+.panel.gameover .panel-buttons {
+  gap: 1cqw;
+}
+
+.panel.gameover .btn {
+  padding: 1.15cqw 2cqw;
+  font-size: 3.4cqw;
 }
 
 .miss-sprite {
@@ -718,6 +778,19 @@ body {
 
 .score-table .pts {
   font-variant-numeric: tabular-nums;
+}
+
+.scores-note {
+  margin: 0;
+  font-size: 3cqw;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+.scores-note.dim {
+  font-size: 2.6cqw;
+  color: var(--ink-soft);
 }
 
 /* Pause + modal */
@@ -853,7 +926,7 @@ body {
   .screen {
     width: 100%;
     height: auto;
-    aspect-ratio: 164 / 117;
+    aspect-ratio: 164 / 108;
     max-width: none;
     max-height: none;
   }
@@ -983,8 +1056,8 @@ body {
   }
 
   .handheld {
-    --lcd-h: min(calc(100svh - 120px), calc((100vw - 48px) / (164 / 117)));
-    width: min(calc(100vw - 8px), calc(var(--lcd-h) * (164 / 117) + 240px));
+    --lcd-h: min(calc(100svh - 120px), calc((100vw - 48px) / (164 / 108)));
+    width: min(calc(100vw - 8px), calc(var(--lcd-h) * (164 / 108) + 240px));
     max-width: calc(100vw - 8px);
     margin-inline: auto;
   }
@@ -1034,7 +1107,7 @@ body {
 
   /* ~358×310 LCD on 932×430 viewport */
   .screen {
-    aspect-ratio: 164 / 117;
+    aspect-ratio: 164 / 108;
     height: var(--lcd-h);
     width: auto;
     max-width: 100%;

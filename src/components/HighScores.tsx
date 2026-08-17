@@ -3,20 +3,41 @@
 import { useEffect, useState } from "react";
 import { PixelIcon } from "@/components/PixelIcon";
 import type { GameMode } from "@/game/GameConfig";
-import { getLocalScores, type LocalScore } from "@/lib/storage";
+import { fetchHighScores, type HighScore } from "@/lib/scores";
+import { getLocalScores } from "@/lib/storage";
 
 type Props = {
   playerName: string;
   onBack: () => void;
 };
 
+type Status = "loading" | "ready" | "local";
+
 export function HighScores({ playerName, onBack }: Props) {
   const [mode, setMode] = useState<GameMode>("A");
-  const [scores, setScores] = useState<LocalScore[]>([]);
+  const [scores, setScores] = useState<HighScore[]>([]);
+  const [status, setStatus] = useState<Status>("loading");
 
   useEffect(() => {
-    const local = getLocalScores(mode);
-    setScores(local.length ? local : seeded(mode));
+    let cancelled = false;
+    setStatus("loading");
+
+    fetchHighScores(mode)
+      .then((list) => {
+        if (cancelled) return;
+        setScores(list.slice(0, 8));
+        setStatus("ready");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        const local = getLocalScores(mode);
+        setScores((local.length ? local : seeded(mode)).slice(0, 8));
+        setStatus("local");
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [mode]);
 
   return (
@@ -43,15 +64,28 @@ export function HighScores({ playerName, onBack }: Props) {
         </button>
       </div>
 
-      <ol className="score-table">
-        {scores.slice(0, 8).map((s, i) => (
-          <li key={`${s.player_name}-${i}`} className={s.player_name === playerName ? "you" : ""}>
-            <span className="rank">{String(i + 1).padStart(2, "0")}</span>
-            <span className="who">{s.player_name}</span>
-            <span className="pts">{s.score}</span>
-          </li>
-        ))}
-      </ol>
+      {status === "loading" ? (
+        <p className="scores-note">LOADING…</p>
+      ) : scores.length === 0 ? (
+        <p className="scores-note">NO SCORES YET</p>
+      ) : (
+        <ol className="score-table">
+          {scores.map((s, i) => (
+            <li
+              key={`${s.player_name}-${s.created_at}-${i}`}
+              className={s.player_name === playerName ? "you" : ""}
+            >
+              <span className="rank">{String(i + 1).padStart(2, "0")}</span>
+              <span className="who">{s.player_name}</span>
+              <span className="pts">{s.score}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {status === "local" && (
+        <p className="scores-note dim">SAVED ON THIS DEVICE</p>
+      )}
 
       <button type="button" className="btn btn-brown wide" onClick={onBack}>
         CLOSE
@@ -60,7 +94,7 @@ export function HighScores({ playerName, onBack }: Props) {
   );
 }
 
-function seeded(mode: GameMode): LocalScore[] {
+function seeded(mode: GameMode): HighScore[] {
   const base = [
     ["ACE", 428],
     ["JIMMY", 391],

@@ -17,29 +17,29 @@ export const DROP_PATHS: Record<Lane, readonly DropStep[]> = {
   /** Left — 7 steps, longest arc from the helicopter across to lane 48. */
   0: [
     { cx: 116, y: 18, sprite: "pathL_0" },
-    { cx: 99, y: 25, sprite: "pathL_1" },
-    { cx: 78, y: 33, sprite: "pathL_2" },
-    { cx: 60, y: 41, sprite: "pathL_3" },
-    { cx: 48, y: 49, sprite: "pathL_4" },
-    { cx: 46, y: 57, sprite: "pathL_5" },
-    { cx: laneCenterX(0), y: 65, sprite: "pathL_6" },
+    { cx: 99, y: 24, sprite: "pathL_1" },
+    { cx: 78, y: 30, sprite: "pathL_2" },
+    { cx: 60, y: 37, sprite: "pathL_3" },
+    { cx: 48, y: 44, sprite: "pathL_4" },
+    { cx: 46, y: 50, sprite: "pathL_5" },
+    { cx: laneCenterX(0), y: 57, sprite: "pathL_6" },
   ],
   /** Centre — 6 steps to lane 82. */
   1: [
     { cx: 116, y: 18, sprite: "pathC_0" },
-    { cx: 102, y: 27, sprite: "pathC_1" },
-    { cx: 90, y: 37, sprite: "pathC_2" },
-    { cx: 82, y: 46, sprite: "pathC_3" },
-    { cx: 80, y: 56, sprite: "pathC_4" },
-    { cx: laneCenterX(1), y: 65, sprite: "pathC_5" },
+    { cx: 102, y: 25, sprite: "pathC_1" },
+    { cx: 90, y: 34, sprite: "pathC_2" },
+    { cx: 82, y: 41, sprite: "pathC_3" },
+    { cx: 80, y: 50, sprite: "pathC_4" },
+    { cx: laneCenterX(1), y: 57, sprite: "pathC_5" },
   ],
   /** Right — 5 steps, near-vertical drop under the helicopter to lane 116. */
   2: [
     { cx: 116, y: 18, sprite: "pathR_0" },
-    { cx: 116, y: 29, sprite: "pathR_1" },
-    { cx: 110, y: 41, sprite: "pathR_2" },
-    { cx: 109, y: 53, sprite: "pathR_3" },
-    { cx: laneCenterX(2), y: 65, sprite: "pathR_4" },
+    { cx: 116, y: 27, sprite: "pathR_1" },
+    { cx: 110, y: 37, sprite: "pathR_2" },
+    { cx: 109, y: 47, sprite: "pathR_3" },
+    { cx: laneCenterX(2), y: 57, sprite: "pathR_4" },
   ],
 };
 

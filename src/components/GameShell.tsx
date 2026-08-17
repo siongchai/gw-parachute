@@ -20,6 +20,7 @@ import {
   setPlayerName,
   setSoundEnabled,
 } from "@/lib/storage";
+import { cleanPlayerName, submitHighScore } from "@/lib/scores";
 
 const IDLE: EngineSnapshot = {
   score: 0,
@@ -43,6 +44,8 @@ export function GameShell() {
   const [playerName, setName] = useState("YOU");
   const [draftName, setDraftName] = useState("YOU");
   const [saveOpen, setSaveOpen] = useState(false);
+  const [saveBusy, setSaveBusy] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [best, setBest] = useState(0);
 
   screenRef.current = screen;
@@ -153,10 +156,14 @@ export function GameShell() {
     audioManager.button();
   };
 
-  const confirmSave = () => {
-    const cleaned = draftName.trim().slice(0, 12).toUpperCase() || "YOU";
+  const confirmSave = async () => {
+    if (saveBusy) return;
+    const cleaned = cleanPlayerName(draftName);
     setPlayerName(cleaned);
     setName(cleaned);
+    setSaveBusy(true);
+    setSaveError(null);
+
     saveLocalScore({
       player_name: cleaned,
       score: snap.score,
@@ -164,8 +171,25 @@ export function GameShell() {
       created_at: new Date().toISOString(),
     });
     setBest(getBestScore(modeRef.current));
-    setSaveOpen(false);
-    audioManager.button();
+
+    try {
+      await submitHighScore({
+        player_name: cleaned,
+        score: snap.score,
+        game_mode: modeRef.current,
+      });
+      setSaveOpen(false);
+    } catch (err) {
+      const code = err instanceof Error ? err.message : "";
+      if (code === "not-configured") {
+        setSaveOpen(false);
+      } else {
+        setSaveError("SAVED ON DEVICE. CLOUD SAVE FAILED.");
+      }
+    } finally {
+      setSaveBusy(false);
+      audioManager.button();
+    }
   };
 
   const click = (fn: () => void) => () => {
@@ -198,6 +222,7 @@ export function GameShell() {
         onAgain={click(() => startGame(modeRef.current))}
         onSave={click(() => {
           setDraftName(playerName);
+          setSaveError(null);
           setSaveOpen(true);
         })}
         onMenu={click(goMenu)}
@@ -238,9 +263,17 @@ export function GameShell() {
       <SaveScoreModal
         open={saveOpen}
         name={draftName}
+        busy={saveBusy}
+        error={saveError}
         onChange={setDraftName}
-        onConfirm={confirmSave}
-        onCancel={() => setSaveOpen(false)}
+        onConfirm={() => {
+          void confirmSave();
+        }}
+        onCancel={() => {
+          if (saveBusy) return;
+          setSaveOpen(false);
+          setSaveError(null);
+        }}
       />
     </div>
   );

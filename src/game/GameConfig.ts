@@ -1,9 +1,9 @@
 /**
  * Logical canvas resolution.
- * Wide-screen LCD; height trimmed so the final drop step lands on the boat.
+ * Wide-screen LCD (~1.52:1) so the playfield matches a short Game & Watch screen.
  */
 export const GAME_WIDTH = 164;
-export const GAME_HEIGHT = 117;
+export const GAME_HEIGHT = 108;
 
 /** Palette taken from the supplied sprite asset sheet. */
 export const COLORS = {
@@ -15,7 +15,7 @@ export const COLORS = {
 } as const;
 
 /** Waterline: wave rows start here and fill to the bottom of the screen. */
-export const WATER_Y = 87;
+export const WATER_Y = 79;
 
 /**
  * Three fixed LCD columns — left, centre, right — matching the reference mockup.
@@ -34,7 +34,7 @@ export const BOAT = {
   width: 40,
   height: 25,
   /** Top of the boat sprite; hull rides just under the waterline. */
-  y: 71,
+  y: 63,
   /** Rowing animation after each column step. */
   rowAnimMs: 240,
   rowFrameMs: 90,

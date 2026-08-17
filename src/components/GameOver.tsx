@@ -20,7 +20,7 @@ export function GameOver({
   onMenu,
 }: Props) {
   return (
-    <div className="panel">
+    <div className="panel gameover">
       <div className="rule-heading">
         <span className="rule" />
         <h2>GAME OVER</h2>
@@ -30,10 +30,14 @@ export function GameOver({
       {newHighScore && <p className="new-best">NEW HIGH SCORE</p>}
 
       <div className="result-block">
-        <span className="result-label">SCORE</span>
-        <LcdDigits value={score} tone="dark" size={30} />
-        <span className="result-label">BEST</span>
-        <LcdDigits value={best} tone="red" size={30} />
+        <div className="result-col">
+          <span className="result-label">SCORE</span>
+          <LcdDigits value={score} tone="dark" />
+        </div>
+        <div className="result-col">
+          <span className="result-label">BEST</span>
+          <LcdDigits value={best} tone="red" />
+        </div>
       </div>
 
       <div className="miss-row">

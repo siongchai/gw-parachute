@@ -54,6 +54,8 @@ src/entities/      Boat, Helicopter, Parachutist, Shark, PalmTree
 src/components/    Handheld casing, canvas host and the cream UI panels
 src/audio/         Synthesised retro sound effects
 src/lib/storage.ts localStorage bests, player name, sound preference
+src/app/api/         High-score API backed by Supabase
+supabase/            SQL schema for the high_scores table
 tools/             Sheet analysis, sprite extraction, icon generation, screenshots
 ```
 
@@ -76,7 +78,24 @@ Game logic is framework-free; React only owns the casing and menus.
 4. Click **Deploy**. Vercel assigns a URL like `https://gw-parachute.vercel.app`.
 5. Future pushes to `main` redeploy automatically.
 
-No environment variables are required yet — high scores stay in the browser (`localStorage`).
+No environment variables are required for a local playtest — high scores still save in the browser (`localStorage`) if Supabase is not configured.
+
+### High scores (Supabase)
+
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open **SQL Editor**, paste `supabase/schema.sql`, and run it.
+3. Copy **Project URL** and **anon public** key from **Project Settings → API**.
+4. Locally, copy `.env.example` to `.env.local` and fill in:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+5. On Vercel, add the same two names under **Project → Settings → Environment Variables**, then redeploy.
+
+**SAVE SCORE** writes to Supabase and also keeps a copy on the device. The high-score list loads from the database when those variables are set.
+
 
 **CLI (optional):** `npm i -g vercel`, then run `vercel` and `vercel --prod` from the project root.
 
