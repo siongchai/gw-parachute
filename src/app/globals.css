@@ -12,9 +12,7 @@
   --screen-frame: #7a3a26;
   --screen-frame-hi: #a35a3c;
   --lcd: #b2bea8;
-  /* PR-21 Wide Screen LCD display area */
-  --lcd-phys-w: 9.72cm;
-  --lcd-phys-h: 5.94cm;
+  /* PR-21 Wide Screen aspect ratio (5.4∶3.3) — size scales with viewport */
   --lcd-aspect: 54 / 33;
   --btn-red: #c2483a;
   --btn-red-hi: #dd6c58;
@@ -72,9 +70,6 @@ body {
   width: 100%;
   max-width: 620px;
   container-type: inline-size;
-  /* Cap physical LCD size to the available viewport (cm units can exceed phone screens). */
-  --lcd-fit-w: min(var(--lcd-phys-w), 100%);
-  --lcd-fit-h: min(var(--lcd-phys-h), calc(var(--lcd-fit-w) * 33 / 54));
 }
 
 .case {
@@ -185,9 +180,6 @@ body {
   min-width: 0;
   border-radius: 14px;
   padding: 8px 10px 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background: linear-gradient(180deg, #eadcbe 0%, var(--bezel) 55%, #cbb894 100%);
   border: 1px solid var(--bezel-edge);
   box-shadow:
@@ -198,8 +190,6 @@ body {
 .bezel-title {
   display: flex;
   align-items: center;
-  align-self: stretch;
-  width: 100%;
   gap: 6px;
   font-size: clamp(7px, 2.1cqw, 12px);
   font-weight: 800;
@@ -223,8 +213,6 @@ body {
 .screen-frame {
   border-radius: 8px;
   padding: 6px;
-  width: fit-content;
-  max-width: 100%;
   background: linear-gradient(180deg, var(--screen-frame-hi), var(--screen-frame) 45%, #4d2013);
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.45),
@@ -233,10 +221,8 @@ body {
 
 .screen {
   position: relative;
-  width: var(--lcd-fit-w);
-  height: auto;
+  width: 100%;
   aspect-ratio: var(--lcd-aspect);
-  max-height: var(--lcd-fit-h);
   margin: 0 auto;
   border-radius: 3px;
   overflow: hidden;
@@ -880,16 +866,13 @@ body {
 /* ──────────────────────────── Responsive ──────────────────────────── */
 
 /*
- * PR-21 LCD: 5.4 cm × 3.3 cm in every layout.
- * Portrait — centred wide-screen panel; landscape — height-matched console row.
+ * Portrait — width drives LCD size; landscape phones — height drives LCD size.
+ * LCD keeps PR-21 wide-screen aspect ratio (54∶33).
  */
 
 /* Portrait phones (incl. iPhone 15 Pro Max @ 430px) */
 @media (orientation: portrait) and (max-width: 480px) {
   .stage {
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: auto;
     padding:
       max(6px, var(--safe-top))
       max(6px, var(--safe-right))
@@ -900,12 +883,6 @@ body {
   .handheld {
     width: 100%;
     max-width: none;
-    --lcd-fit-w: min(
-      var(--lcd-phys-w),
-      calc(100vw - 24px - var(--safe-left) - var(--safe-right)),
-      calc((100dvh - 280px - var(--safe-top) - var(--safe-bottom)) * 54 / 33)
-    );
-    --lcd-fit-h: min(var(--lcd-phys-h), calc(var(--lcd-fit-w) * 33 / 54));
   }
 
   .case {
@@ -940,15 +917,18 @@ body {
   .bezel {
     width: 100%;
     padding: 5px 6px 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
   .screen-frame {
     padding: 3px;
-    width: fit-content;
-    max-width: 100%;
+  }
+
+  .screen {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--lcd-aspect);
+    max-width: none;
+    max-height: none;
   }
 
   .mode-column {
@@ -1000,20 +980,8 @@ body {
 
 /* Portrait tablets / tall desktop windows */
 @media (orientation: portrait) and (min-width: 481px) {
-  .stage {
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
   .handheld {
     max-width: 440px;
-    --lcd-fit-w: min(
-      var(--lcd-phys-w),
-      calc(100vw - 48px),
-      calc((100dvh - 320px) * 54 / 33)
-    );
-    --lcd-fit-h: min(var(--lcd-phys-h), calc(var(--lcd-fit-w) * 33 / 54));
   }
 
   .faceplate {
@@ -1039,14 +1007,11 @@ body {
 
   .bezel {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .screen-frame {
-    width: fit-content;
-    max-width: 100%;
+  .screen {
+    width: 100%;
+    max-height: min(420px, 58dvh);
   }
 
   .mode-column {
@@ -1083,9 +1048,6 @@ body {
 /* Landscape phones (incl. iPhone 15 Pro Max @ 430px height) */
 @media (orientation: landscape) and (max-height: 480px) {
   .stage {
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: auto;
     padding:
       max(4px, var(--safe-top))
       max(4px, var(--safe-right))
@@ -1094,33 +1056,27 @@ body {
   }
 
   .handheld {
-    width: fit-content;
-    max-width: calc(100vw - 8px - var(--safe-left) - var(--safe-right));
+    --lcd-h: min(calc(100svh - 120px), calc((100vw - 48px) / (54 / 33)));
+    width: min(calc(100vw - 8px), calc(var(--lcd-h) * (54 / 33) + 240px));
+    max-width: calc(100vw - 8px);
     margin-inline: auto;
-    --lcd-fit-w: min(
-      var(--lcd-phys-w),
-      calc(100vw - 200px - var(--safe-left) - var(--safe-right)),
-      calc((100svh - 24px - var(--safe-top) - var(--safe-bottom)) * 54 / 33)
-    );
-    --lcd-fit-h: min(var(--lcd-phys-h), calc(var(--lcd-fit-w) * 33 / 54));
   }
 
   .case {
-    padding: 4px;
-    border-radius: 14px;
+    padding: 6px;
+    border-radius: 16px;
     width: 100%;
-    max-height: calc(100svh - 8px - var(--safe-top) - var(--safe-bottom));
   }
 
   .faceplate {
     width: 100%;
-    grid-template-columns: minmax(52px, auto) minmax(0, 1fr) minmax(44px, auto);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: minmax(0, 1fr) auto;
     grid-template-areas:
       "left  screen modes"
       "left  screen right";
-    gap: 3px 6px;
-    padding: 4px 6px;
+    gap: 4px 8px;
+    padding: 6px 8px;
     align-items: center;
   }
 
@@ -1130,60 +1086,59 @@ body {
   }
 
   .bezel {
-    padding: 3px 5px 2px;
+    padding: 4px 6px 3px;
     width: auto;
     justify-self: center;
-    min-width: 0;
   }
 
   .bezel-title {
-    display: none;
+    margin-bottom: 2px;
+    font-size: clamp(7px, 1.7svh, 9px);
+    gap: 4px;
+  }
+
+  .bezel-title.bottom {
+    margin-top: 2px;
   }
 
   .screen-frame {
-    padding: 3px;
-    width: fit-content;
+    padding: 4px;
+  }
+
+  .screen {
+    aspect-ratio: var(--lcd-aspect);
+    height: var(--lcd-h);
+    width: auto;
     max-width: 100%;
+    max-height: calc(100svh - 120px);
   }
 
   .pad {
     align-self: center;
   }
 
-  .pad-left {
-    justify-self: center;
-    padding-left: 0;
-  }
-
-  .pad-right {
-    justify-self: center;
-    padding-right: 0;
-  }
-
   .round-btn {
-    width: clamp(44px, 11svh, 60px);
-    height: clamp(44px, 11svh, 60px);
+    width: clamp(58px, 15.5svh, 72px);
+    height: clamp(58px, 15.5svh, 72px);
   }
 
   .pad-label {
-    font-size: clamp(8px, 2.1svh, 10px);
+    font-size: clamp(9px, 2.4svh, 11px);
   }
 
   .mode-column {
-    gap: 2px;
+    gap: 4px;
     padding-top: 0;
     align-self: center;
-    min-width: 40px;
-  }
-
-  .mode-label {
-    margin-bottom: 0;
-    font-size: clamp(5px, 1.4svh, 7px);
   }
 
   .pill {
-    width: clamp(26px, 6.5svh, 32px);
-    height: clamp(11px, 2.8svh, 14px);
+    width: clamp(30px, 8.5svh, 38px);
+    height: clamp(14px, 3.8svh, 17px);
+  }
+
+  .mode-label {
+    font-size: clamp(7px, 1.9svh, 9px);
   }
 
   .led-note {
@@ -1195,23 +1150,11 @@ body {
 @media (orientation: landscape) and (min-height: 481px) {
   .handheld {
     max-width: 620px;
-    --lcd-fit-w: min(
-      var(--lcd-phys-w),
-      calc(100vw - 280px),
-      calc((100svh - 48px) * 54 / 33)
-    );
-    --lcd-fit-h: min(var(--lcd-phys-h), calc(var(--lcd-fit-w) * 33 / 54));
   }
 
-  .bezel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .screen-frame {
-    width: fit-content;
-    max-width: 100%;
+  .screen {
+    width: 100%;
+    max-height: min(420px, 62dvh);
   }
 }
 

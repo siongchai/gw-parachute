@@ -1,6 +1,6 @@
 /**
  * Logical canvas resolution.
- * Wide-screen LCD playfield; on-screen display is 9.72 cm × 5.94 cm.
+ * Wide-screen LCD playfield (PR-21 aspect ratio 54∶33); size scales with viewport.
  */
 export const GAME_WIDTH = 164;
 export const GAME_HEIGHT = 108;
