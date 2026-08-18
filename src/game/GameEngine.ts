@@ -46,6 +46,8 @@ const WAVE_ROWS = [
   { id: "wave_2" as SpriteId, y: WATER_Y + 19, speed: 3 },
 ];
 
+const CANVAS_SCALE = 2;
+
 export class GameEngine {
   private ctx: CanvasRenderingContext2D;
   private sprites = new SpriteManager();
@@ -77,8 +79,9 @@ export class GameEngine {
   constructor(canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) throw new Error("Canvas 2D context unavailable");
-    canvas.width = GAME_WIDTH;
-    canvas.height = GAME_HEIGHT;
+    canvas.width = GAME_WIDTH * CANVAS_SCALE;
+    canvas.height = GAME_HEIGHT * CANVAS_SCALE;
+    ctx.scale(CANVAS_SCALE, CANVAS_SCALE);
     ctx.imageSmoothingEnabled = false;
     this.ctx = ctx;
   }

@@ -68,7 +68,7 @@ export const HELICOPTER = {
   /** Fixed top-right corner (LCD mockup). */
   x: GAME_WIDTH - 44,
   y: 4,
-  rotorFrameMs: 70,
+  rotorFrameMs: 90,
 } as const;
 
 export const PALM = {

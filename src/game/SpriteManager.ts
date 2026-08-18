@@ -106,29 +106,56 @@ export type DrawOptions = {
 };
 
 const BASE_PATH = "/sprites/";
+const SPRITE_CACHE_BUST = "20260818-heli-v9";
+const HELICOPTER_HIRES = [
+  "helicopter/heli_hires_0.png",
+  "helicopter/heli_hires_1.png",
+  "helicopter/heli_hires_2.png",
+  "helicopter/heli_hires_3.png",
+] as const;
+
+async function loadImage(src: string): Promise<HTMLImageElement> {
+  const img = new Image();
+  img.src = src;
+  try {
+    await img.decode();
+  } catch {
+    await new Promise<void>((resolve) => {
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    });
+  }
+  return img;
+}
 
 export class SpriteManager {
   private images = new Map<SpriteId, HTMLImageElement>();
+  private helicopterHires: (HTMLImageElement | null)[] = [];
   private ready = false;
 
   async init(): Promise<void> {
     if (typeof window === "undefined") return;
 
     const entries = Object.entries(SPRITE_MANIFEST) as [SpriteId, string][];
-    await Promise.all(
-      entries.map(async ([id, file]) => {
-        const img = new Image();
-        img.src = BASE_PATH + file;
-        try {
-          await img.decode();
-        } catch {
-          await new Promise<void>((resolve) => {
-            img.onload = () => resolve();
-            img.onerror = () => resolve();
-          });
-        }
-        this.images.set(id, img);
-      }),
+    const [sprites, hires] = await Promise.all([
+      Promise.all(
+        entries.map(async ([id, file]) => {
+          const img = await loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`);
+          return [id, img] as const;
+        }),
+      ),
+      Promise.all(
+        HELICOPTER_HIRES.map((file) =>
+          loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
+        ),
+      ),
+    ]);
+
+    for (const [id, img] of sprites) {
+      this.images.set(id, img);
+    }
+    this.helicopterHires = hires.map((img) =>
+      img.naturalWidth > 0 ? img : null,
     );
     this.ready = true;
   }
@@ -173,6 +200,29 @@ export class SpriteManager {
     } else {
       ctx.drawImage(img, px, py);
     }
+    ctx.restore();
+  }
+
+  /** Four-frame rotor animation — smooth-scaled from aligned hires sprites. */
+  drawHelicopter(
+    ctx: CanvasRenderingContext2D,
+    frame: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): void {
+    const idx = frame % 4;
+    const hires = this.helicopterHires[idx];
+    const img =
+      hires ??
+      this.images.get(`heli_${idx}` as SpriteId);
+    if (!img?.naturalWidth) return;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, x, y, w, h);
     ctx.restore();
   }
 

@@ -1,7 +1,5 @@
 import { HELICOPTER } from "../game/GameConfig";
-import type { SpriteId, SpriteManager } from "../game/SpriteManager";
-
-const FRAMES: SpriteId[] = ["heli_0", "heli_1", "heli_2", "heli_3"];
+import type { SpriteManager } from "../game/SpriteManager";
 
 /** Fixed top-right helicopter — rotor animates, body never moves (LCD mockup). */
 export class Helicopter {
@@ -20,11 +18,18 @@ export class Helicopter {
     this.frameTimer += dt;
     if (this.frameTimer >= HELICOPTER.rotorFrameMs) {
       this.frameTimer = 0;
-      this.frame = (this.frame + 1) % FRAMES.length;
+      this.frame = (this.frame + 1) % 4;
     }
   }
 
   render(ctx: CanvasRenderingContext2D, sprites: SpriteManager): void {
-    sprites.draw(ctx, FRAMES[this.frame], this.x, this.y);
+    sprites.drawHelicopter(
+      ctx,
+      this.frame,
+      this.x,
+      this.y,
+      HELICOPTER.width,
+      HELICOPTER.height,
+    );
   }
 }

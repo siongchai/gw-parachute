@@ -203,9 +203,13 @@ def digit_cell(box):
 
 
 def main():
+    import sys
+
+    sys.path.insert(0, os.path.dirname(__file__))
+    from extract_helicopter import main as extract_helicopter_frames
+
     print("helicopter")
-    for i, b in enumerate(HELI):
-        save(extract(b, width=40), "helicopter", f"heli_{i}")
+    extract_helicopter_frames()
 
     print("parachutist")
     for i, b in enumerate(FALL):

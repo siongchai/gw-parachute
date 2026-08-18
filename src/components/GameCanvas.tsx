@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { GameEngine, type EngineCallbacks } from "@/game/GameEngine";
-import { GAME_HEIGHT, GAME_WIDTH } from "@/game/GameConfig";
 
 type Props = {
   callbacks: EngineCallbacks;
@@ -42,8 +41,6 @@ export function GameCanvas({ callbacks, onReady }: Props) {
     <canvas
       ref={canvasRef}
       className="game-canvas"
-      width={GAME_WIDTH}
-      height={GAME_HEIGHT}
       aria-label="Parachute Rescue game screen"
     />
   );
