@@ -1,6 +1,6 @@
 /**
  * Logical canvas resolution.
- * Wide-screen LCD playfield; physical bezel is 5.4 cm × 3.3 cm (PR-21).
+ * Wide-screen LCD playfield; on-screen display is 9.72 cm × 5.94 cm.
  */
 export const GAME_WIDTH = 164;
 export const GAME_HEIGHT = 108;

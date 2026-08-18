@@ -12,10 +12,9 @@
   --screen-frame: #7a3a26;
   --screen-frame-hi: #a35a3c;
   --lcd: #b2bea8;
-  /* PR-21 Wide Screen LCD — 5.4 cm × 3.3 cm (June 1981), scaled for display */
-  --lcd-scale: 1.5;
-  --lcd-phys-w: calc(5.4cm * var(--lcd-scale));
-  --lcd-phys-h: calc(3.3cm * var(--lcd-scale));
+  /* PR-21 Wide Screen LCD display area */
+  --lcd-phys-w: 9.72cm;
+  --lcd-phys-h: 5.94cm;
   --lcd-aspect: 54 / 33;
   --btn-red: #c2483a;
   --btn-red-hi: #dd6c58;
