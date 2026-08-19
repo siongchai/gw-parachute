@@ -222,8 +222,9 @@ def main():
         save(extract(b, width=22), "parachutist", f"splash_{i}")
 
     print("boat")
-    for i, b in enumerate(BOAT):
-        save(extract(b, width=40), "boat", f"boat_{i}")
+    from extract_boatman import main as extract_boatman_frames
+
+    extract_boatman_frames()
 
     print("shark")
     for i, b in enumerate(FIN_UP):

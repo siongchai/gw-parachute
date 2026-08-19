@@ -106,12 +106,18 @@ export type DrawOptions = {
 };
 
 const BASE_PATH = "/sprites/";
-const SPRITE_CACHE_BUST = "20260818-heli-v9";
+const SPRITE_CACHE_BUST = "20260819-boat-v4";
 const HELICOPTER_HIRES = [
   "helicopter/heli_hires_0.png",
   "helicopter/heli_hires_1.png",
   "helicopter/heli_hires_2.png",
   "helicopter/heli_hires_3.png",
+] as const;
+
+const BOAT_HIRES = [
+  "boat/boat_hires_0.png",
+  "boat/boat_hires_1.png",
+  "boat/boat_hires_2.png",
 ] as const;
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
@@ -131,13 +137,14 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
 export class SpriteManager {
   private images = new Map<SpriteId, HTMLImageElement>();
   private helicopterHires: (HTMLImageElement | null)[] = [];
+  private boatHires: (HTMLImageElement | null)[] = [];
   private ready = false;
 
   async init(): Promise<void> {
     if (typeof window === "undefined") return;
 
     const entries = Object.entries(SPRITE_MANIFEST) as [SpriteId, string][];
-    const [sprites, hires] = await Promise.all([
+    const [sprites, heliHires, boatHires] = await Promise.all([
       Promise.all(
         entries.map(async ([id, file]) => {
           const img = await loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`);
@@ -149,12 +156,20 @@ export class SpriteManager {
           loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
         ),
       ),
+      Promise.all(
+        BOAT_HIRES.map((file) =>
+          loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
+        ),
+      ),
     ]);
 
     for (const [id, img] of sprites) {
       this.images.set(id, img);
     }
-    this.helicopterHires = hires.map((img) =>
+    this.helicopterHires = heliHires.map((img) =>
+      img.naturalWidth > 0 ? img : null,
+    );
+    this.boatHires = boatHires.map((img) =>
       img.naturalWidth > 0 ? img : null,
     );
     this.ready = true;
@@ -217,6 +232,29 @@ export class SpriteManager {
     const img =
       hires ??
       this.images.get(`heli_${idx}` as SpriteId);
+    if (!img?.naturalWidth) return;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, x, y, w, h);
+    ctx.restore();
+  }
+
+  /** Lane pose (left / centre / right) — smooth-scaled from hires sprites. */
+  drawBoat(
+    ctx: CanvasRenderingContext2D,
+    lane: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): void {
+    const idx = Math.max(0, Math.min(2, lane));
+    const hires = this.boatHires[idx];
+    const img =
+      hires ??
+      this.images.get(`boat_${idx}` as SpriteId);
     if (!img?.naturalWidth) return;
 
     ctx.save();

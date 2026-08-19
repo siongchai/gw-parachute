@@ -33,11 +33,12 @@ export const LANES = {
 export const BOAT = {
   width: 40,
   height: 25,
-  /** Top of the boat sprite; hull rides just under the waterline. */
-  y: 63,
-  /** Rowing animation after each column step. */
-  rowAnimMs: 240,
-  rowFrameMs: 90,
+  /** Top of the boat sprite; hull rides slightly above the waterline. */
+  y: 60,
+  /** Per-lane vertical nudge (left / centre / right) to align hull with centre pose. */
+  laneYOffset: [-5, 0, -4] as const,
+  /** Per-lane horizontal nudge so left/right poses align under the drop path. */
+  laneXOffset: [-5, -3, -12] as const,
   /** Catch window sits over the rescuer's arms. */
   catchInsetX: 4,
   catchTop: 6,
