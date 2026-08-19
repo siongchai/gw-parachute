@@ -32,6 +32,8 @@
   --btn-tan: #cdb98b;
   --btn-tan-lo: #a89268;
   --green: #1f7a3a;
+  --tagline-ink: #5a4032;
+  --tagline-rule: rgba(90, 64, 50, 0.65);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -59,11 +61,21 @@ body {
   min-height: 100dvh;
   min-height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: max(8px, var(--safe-top)) max(8px, env(safe-area-inset-right, 0px))
     max(8px, var(--safe-bottom)) max(8px, env(safe-area-inset-left, 0px));
   overflow: hidden;
+}
+
+.stage-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
 }
 
 .handheld {
@@ -208,6 +220,44 @@ body {
   height: 1.5px;
   background: var(--ink);
   opacity: 0.75;
+}
+
+/* Vintage printed label — subtle brand signature above the console */
+.tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 14px);
+  width: min(620px, 100%);
+  padding: clamp(2px, 0.6vh, 6px) clamp(12px, 3vw, 24px) clamp(6px, 1vh, 10px);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.tagline-line {
+  flex: 1 1 0;
+  min-width: clamp(6px, 2vw, 24px);
+  height: 1px;
+  background: var(--tagline-rule);
+}
+
+.tagline-text {
+  flex: 0 0 auto;
+  font-family:
+    ui-monospace,
+    "SFMono-Regular",
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  font-size: clamp(8px, 2.2vw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--tagline-ink);
+  white-space: nowrap;
 }
 
 .screen-frame {
@@ -1053,12 +1103,32 @@ body {
     max-height: 100dvh;
     overflow: hidden;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding:
       max(4px, var(--safe-top))
       max(4px, var(--safe-right))
       max(4px, var(--safe-bottom))
       max(4px, var(--safe-left));
+  }
+
+  .tagline {
+    width: min(100%, calc(100vw - 16px));
+    padding: 2px clamp(8px, 2vw, 16px) 4px;
+    gap: clamp(8px, 1.4vw, 12px);
+  }
+
+  .tagline-text {
+    font-size: clamp(7px, 1.8dvh, 9px);
+    letter-spacing: 0.12em;
+  }
+
+  .tagline-line {
+    min-width: clamp(4px, 1.2vw, 12px);
+  }
+
+  .stage-main {
+    flex: 1;
+    min-height: 0;
   }
 
   .handheld {

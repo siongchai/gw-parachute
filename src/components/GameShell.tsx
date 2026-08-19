@@ -250,15 +250,23 @@ export function GameShell() {
 
   return (
     <div className="stage">
-      <Handheld
-        screen={<GameCanvas callbacks={engineCallbacks} onReady={onEngineReady} />}
-        overlay={overlay}
-        onStepLeft={() => stepBoat("left")}
-        onStepRight={() => stepBoat("right")}
-        onGameA={click(() => startGame("A"))}
-        onGameB={click(() => startGame("B"))}
-        onTime={click(() => (screen === "MENU" ? setScreen("HIGH_SCORES") : goMenu()))}
-      />
+      <div className="tagline" aria-hidden="true">
+        <span className="tagline-line" />
+        <span className="tagline-text">PLAY THE MEMORIES. AGAIN.</span>
+        <span className="tagline-line" />
+      </div>
+
+      <div className="stage-main">
+        <Handheld
+          screen={<GameCanvas callbacks={engineCallbacks} onReady={onEngineReady} />}
+          overlay={overlay}
+          onStepLeft={() => stepBoat("left")}
+          onStepRight={() => stepBoat("right")}
+          onGameA={click(() => startGame("A"))}
+          onGameB={click(() => startGame("B"))}
+          onTime={click(() => (screen === "MENU" ? setScreen("HIGH_SCORES") : goMenu()))}
+        />
+      </div>
 
       <SaveScoreModal
         open={saveOpen}
