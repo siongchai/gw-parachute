@@ -85,8 +85,12 @@ export const HUD = {
   digitAdvance: 12,
   /** Bottom-right corner (LCD mockup); label sits above the miss icons. */
   missLabelY: GAME_HEIGHT - 24,
-  missIconY: GAME_HEIGHT - 14,
-  missIconAdvance: 11,
+  missIconY: GAME_HEIGHT - 16,
+  missIconW: 13,
+  missIconH: 14,
+  missIconAdvance: 13,
+  /** Inset from the right LCD edge for miss icons. */
+  missIconRight: 2,
   /** Bottom-left corner — GAME A / GAME B mode indicator. */
   modeLabelX: 4,
   modeLabelY: GAME_HEIGHT - 7,

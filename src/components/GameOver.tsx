@@ -47,8 +47,8 @@ export function GameOver({
             key={i}
             className="miss-sprite"
             style={{
-              maskImage: `url(/sprites/ui/miss_icon_${i}.png)`,
-              WebkitMaskImage: `url(/sprites/ui/miss_icon_${i}.png)`,
+              maskImage: `url(/sprites/ui/miss_icon_hires.png?v=20260819-missicon-v2)`,
+              WebkitMaskImage: `url(/sprites/ui/miss_icon_hires.png?v=20260819-missicon-v2)`,
             }}
           />
         ))}

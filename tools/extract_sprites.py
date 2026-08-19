@@ -245,6 +245,9 @@ def main():
     print("ui")
     for i, b in enumerate(MISS_ICONS):
         save(extract(b, width=9), "ui", f"miss_icon_{i}")
+    from extract_miss_icon import main as extract_miss_icon_frames
+
+    extract_miss_icon_frames()
     # Tiny 3x5 GAME A/B labels sit in the bottom-left LCD corner.
     save(pixel_label("GAME A", font=_PIXEL_FONT_3X5), "ui", "label_game_a")
     save(pixel_label("GAME B", font=_PIXEL_FONT_3X5), "ui", "label_game_b")

@@ -311,13 +311,13 @@ export class GameEngine {
         HUD.missLabelY,
       );
       for (let i = 0; i < this.misses; i++) {
-        const iconId = `miss_icon_${i}` as SpriteId;
-        const icon = this.sprites.size(iconId);
-        this.sprites.draw(
+        this.sprites.drawMissIcon(
           ctx,
-          iconId,
-          GAME_WIDTH - 6 - icon.w - (this.misses - 1 - i) * HUD.missIconAdvance,
+          i,
+          GAME_WIDTH - HUD.missIconRight - HUD.missIconW - (this.misses - 1 - i) * HUD.missIconAdvance,
           HUD.missIconY,
+          HUD.missIconW,
+          HUD.missIconH,
         );
       }
     }

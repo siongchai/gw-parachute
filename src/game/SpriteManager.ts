@@ -106,7 +106,7 @@ export type DrawOptions = {
 };
 
 const BASE_PATH = "/sprites/";
-const SPRITE_CACHE_BUST = "20260819-boat-v4";
+const SPRITE_CACHE_BUST = "20260819-missicon-v2";
 const HELICOPTER_HIRES = [
   "helicopter/heli_hires_0.png",
   "helicopter/heli_hires_1.png",
@@ -119,6 +119,8 @@ const BOAT_HIRES = [
   "boat/boat_hires_1.png",
   "boat/boat_hires_2.png",
 ] as const;
+
+const MISS_ICON_HIRES = "ui/miss_icon_hires.png";
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
   const img = new Image();
@@ -138,13 +140,14 @@ export class SpriteManager {
   private images = new Map<SpriteId, HTMLImageElement>();
   private helicopterHires: (HTMLImageElement | null)[] = [];
   private boatHires: (HTMLImageElement | null)[] = [];
+  private missIconHire: HTMLImageElement | null = null;
   private ready = false;
 
   async init(): Promise<void> {
     if (typeof window === "undefined") return;
 
     const entries = Object.entries(SPRITE_MANIFEST) as [SpriteId, string][];
-    const [sprites, heliHires, boatHires] = await Promise.all([
+    const [sprites, heliHires, boatHires, missIconHire] = await Promise.all([
       Promise.all(
         entries.map(async ([id, file]) => {
           const img = await loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`);
@@ -161,6 +164,7 @@ export class SpriteManager {
           loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
         ),
       ),
+      loadImage(`${BASE_PATH}${MISS_ICON_HIRES}?v=${SPRITE_CACHE_BUST}`),
     ]);
 
     for (const [id, img] of sprites) {
@@ -172,6 +176,8 @@ export class SpriteManager {
     this.boatHires = boatHires.map((img) =>
       img.naturalWidth > 0 ? img : null,
     );
+    this.missIconHire =
+      missIconHire.naturalWidth > 0 ? missIconHire : null;
     this.ready = true;
   }
 
@@ -255,6 +261,28 @@ export class SpriteManager {
     const img =
       hires ??
       this.images.get(`boat_${idx}` as SpriteId);
+    if (!img?.naturalWidth) return;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, x, y, w, h);
+    ctx.restore();
+  }
+
+  /** HUD miss shark icons — smooth-scaled from hires sprites. */
+  drawMissIcon(
+    ctx: CanvasRenderingContext2D,
+    index: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): void {
+    const idx = Math.max(0, Math.min(2, index));
+    const img =
+      this.missIconHire ??
+      this.images.get(`miss_icon_${idx}` as SpriteId);
     if (!img?.naturalWidth) return;
 
     ctx.save();

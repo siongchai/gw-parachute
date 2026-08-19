@@ -723,13 +723,14 @@ body {
 
 .panel.gameover .miss-row {
   font-size: 2.8cqw;
+  margin-left: 0.8cqw;
 }
 
 .panel.gameover .miss-sprite {
-  width: 3.6cqw;
-  height: 4cqw;
-  min-width: 8px;
-  min-height: 9px;
+  width: 5cqw;
+  height: 5.4cqw;
+  min-width: 13px;
+  min-height: 14px;
 }
 
 .panel.gameover .panel-buttons {
@@ -742,10 +743,10 @@ body {
 }
 
 .miss-sprite {
-  width: 4.5cqw;
-  height: 5cqw;
-  min-width: 12px;
-  min-height: 13px;
+  width: 5.8cqw;
+  height: 6.2cqw;
+  min-width: 15px;
+  min-height: 16px;
   background: #1e1a14;
   mask-repeat: no-repeat;
   mask-position: center;
