@@ -66,6 +66,13 @@ export class AudioManager {
     setTimeout(() => this.beep(120, 0.2, "sawtooth", 0.06), 100);
   }
 
+  /** Classic milestone: misses cleared at 200 / 500. */
+  missClear(): void {
+    this.beep(523, 0.08, "square", 0.06);
+    setTimeout(() => this.beep(659, 0.08, "square", 0.06), 70);
+    setTimeout(() => this.beep(784, 0.12, "square", 0.07), 140);
+  }
+
   gameOver(): void {
     this.beep(300, 0.12);
     setTimeout(() => this.beep(220, 0.14), 130);

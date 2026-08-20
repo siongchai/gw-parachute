@@ -12,6 +12,7 @@ import {
   HUD,
   laneCenterX,
   MAX_MISSES,
+  MISS_CLEAR_SCORES,
   BOAT,
   WATER_Y,
   PALM,
@@ -35,6 +36,7 @@ export type EngineSnapshot = {
 export type EngineCallbacks = {
   onCatch?: () => void;
   onMiss?: () => void;
+  onMissClear?: () => void;
   onGameOver?: (score: number) => void;
   onNewHighScore?: () => void;
   onChange?: (snap: EngineSnapshot) => void;
@@ -67,6 +69,8 @@ export class GameEngine {
   private gameOver = false;
   private newHighScore = false;
   private bestScore = 0;
+  /** Score milestones already used to clear misses (200 / 500). */
+  private clearedMissThresholds = new Set<number>();
 
   private spawnTimer = 0;
   private missFlashTimer = 0;
@@ -106,6 +110,7 @@ export class GameEngine {
     this.paused = false;
     this.gameOver = false;
     this.newHighScore = false;
+    this.clearedMissThresholds.clear();
     this.spawnTimer = 700;
     this.missFlashTimer = 0;
     this.parachutists = [];
@@ -221,6 +226,7 @@ export class GameEngine {
           p.markCaught();
           this.score += 1;
           this.callbacks.onCatch?.();
+          this.maybeClearMisses();
           this.emit();
           continue;
         }
@@ -238,9 +244,26 @@ export class GameEngine {
     this.sharks = this.sharks.filter((s) => !s.remove);
   }
 
+  /**
+   * Classic rule: reaching 200 or 500 points clears all accumulated misses.
+   * Each milestone only fires once per run.
+   */
+  private maybeClearMisses(): void {
+    for (const threshold of MISS_CLEAR_SCORES) {
+      if (this.score < threshold) continue;
+      if (this.clearedMissThresholds.has(threshold)) continue;
+      this.clearedMissThresholds.add(threshold);
+      if (this.misses <= 0) continue;
+      this.misses = 0;
+      this.missFlashTimer = 0;
+      this.callbacks.onMissClear?.();
+    }
+  }
+
   private tryPalmSnag(p: Parachutist, settings: DifficultySettings): void {
-    if (p.lane !== 0 || p.dropY > PALM.y + 28) return;
-    const palm = this.palms[0];
+    // Outer lanes can snag on the matching palm (left = lane 0, right = lane 2).
+    if (p.lane === 1 || p.dropY > PALM.y + 28) return;
+    const palm = this.palms[p.lane === 0 ? 0 : 1];
     if (!CollisionManager.overlaps(p.getPalmBounds(), palm.getFrondZone())) return;
     if (Math.random() >= settings.palmSnagChance) return;
     const delay =

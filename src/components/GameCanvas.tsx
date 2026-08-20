@@ -26,6 +26,7 @@ export function GameCanvas({ callbacks, onReady }: Props) {
       onChange: (s) => callbacksRef.current.onChange?.(s),
       onCatch: () => callbacksRef.current.onCatch?.(),
       onMiss: () => callbacksRef.current.onMiss?.(),
+      onMissClear: () => callbacksRef.current.onMissClear?.(),
       onGameOver: (score) => callbacksRef.current.onGameOver?.(score),
       onNewHighScore: () => callbacksRef.current.onNewHighScore?.(),
     });

@@ -22,7 +22,10 @@ export function HowToPlay({ onBack }: Props) {
           <h3 className="howto-head green">CATCH</h3>
           <div className="howto-row">
             <PixelIcon name="catch" className="howto-icon" />
-            <p>Catch the skydivers to earn points.</p>
+            <p>
+              Catch parachutists jumping from the helicopter — each rescue is worth
+              one point. More jumpers appear and fall faster as you score.
+            </p>
           </div>
         </section>
 
@@ -30,7 +33,10 @@ export function HowToPlay({ onBack }: Props) {
           <h3 className="howto-head red">MISS</h3>
           <div className="howto-row">
             <PixelIcon name="shark" className="howto-icon" />
-            <p>Missed skydivers are eaten by sharks.</p>
+            <p>
+              A miss lets the shark below catch them instead. Reaching 200 or 500
+              points clears all misses.
+            </p>
           </div>
         </section>
 
@@ -46,7 +52,7 @@ export function HowToPlay({ onBack }: Props) {
           <h3 className="howto-head green">GAME B</h3>
           <div className="howto-row">
             <PixelIcon name="parachute" className="howto-icon" />
-            <p>Skydivers snag on palm trees and drop without warning.</p>
+            <p>Some parachutists get stuck in the trees before dropping again.</p>
           </div>
         </section>
       </div>
