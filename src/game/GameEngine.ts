@@ -326,12 +326,12 @@ export class GameEngine {
     this.sprites.drawScore(ctx, this.score, HUD.scoreX, HUD.scoreY, HUD.digitAdvance);
 
     if (this.misses > 0) {
-      const label = this.sprites.size("label_miss");
-      this.sprites.draw(
+      this.sprites.drawMissLabel(
         ctx,
-        "label_miss",
-        GAME_WIDTH - label.w - 6,
+        GAME_WIDTH - HUD.missLabelRight - HUD.missLabelW,
         HUD.missLabelY,
+        HUD.missLabelW,
+        HUD.missLabelH,
       );
       for (let i = 0; i < this.misses; i++) {
         this.sprites.drawMissIcon(
@@ -346,12 +346,12 @@ export class GameEngine {
     }
 
     if (this.missFlashTimer > 0 && Math.floor(this.missFlashTimer / 120) % 2 === 0) {
-      const label = this.sprites.size("label_miss");
-      this.sprites.draw(
+      this.sprites.drawMissLabel(
         ctx,
-        "label_miss",
-        Math.round((GAME_WIDTH - label.w) / 2),
+        Math.round((GAME_WIDTH - HUD.missLabelW) / 2),
         58,
+        HUD.missLabelW,
+        HUD.missLabelH,
       );
     }
 
