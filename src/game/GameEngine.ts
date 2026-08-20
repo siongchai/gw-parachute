@@ -357,8 +357,14 @@ export class GameEngine {
 
     // Mode label last so waves / palms never cover it.
     if (this.playing || this.gameOver) {
-      const modeId = this.mode === "A" ? "label_game_a" : "label_game_b";
-      this.sprites.draw(ctx, modeId, HUD.modeLabelX, HUD.modeLabelY);
+      this.sprites.drawGameLabel(
+        ctx,
+        this.mode,
+        HUD.modeLabelX,
+        HUD.modeLabelY,
+        HUD.modeLabelW,
+        HUD.modeLabelH,
+      );
     }
   }
 }

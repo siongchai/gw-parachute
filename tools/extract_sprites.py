@@ -251,6 +251,9 @@ def main():
     from extract_miss_label import main as extract_miss_label_frames
 
     extract_miss_label_frames()
+    from extract_game_labels import main as extract_game_label_frames
+
+    extract_game_label_frames()
     # Tiny 3x5 GAME A/B labels sit in the bottom-left LCD corner.
     save(pixel_label("GAME A", font=_PIXEL_FONT_3X5), "ui", "label_game_a")
     save(pixel_label("GAME B", font=_PIXEL_FONT_3X5), "ui", "label_game_b")
