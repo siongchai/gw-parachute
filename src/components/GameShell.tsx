@@ -65,6 +65,7 @@ export function GameShell() {
     onChange: (s) => setSnap(s),
     onCatch: () => audioManager.catch(),
     onMiss: () => audioManager.miss(),
+    onMissClear: () => audioManager.missClear(),
     onGameOver: (score) => {
       audioManager.gameOver();
       setBestScore(modeRef.current, score);
@@ -78,6 +79,7 @@ export function GameShell() {
     onChange: (s) => callbacksRef.current.onChange?.(s),
     onCatch: () => callbacksRef.current.onCatch?.(),
     onMiss: () => callbacksRef.current.onMiss?.(),
+    onMissClear: () => callbacksRef.current.onMissClear?.(),
     onGameOver: (score) => callbacksRef.current.onGameOver?.(score),
     onNewHighScore: () => callbacksRef.current.onNewHighScore?.(),
   }).current;

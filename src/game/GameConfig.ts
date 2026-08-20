@@ -98,6 +98,12 @@ export const HUD = {
 
 export const MAX_MISSES = 3;
 
+/**
+ * Classic Parachute: accumulated misses are cleared when the score
+ * reaches these milestones (200 and 500).
+ */
+export const MISS_CLEAR_SCORES = [200, 500] as const;
+
 export type GameMode = "A" | "B";
 
 export type AppScreen =

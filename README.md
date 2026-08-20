@@ -66,9 +66,11 @@ Game logic is framework-free; React only owns the casing and menus.
 
 ## Modes
 
-- **Game A** — standard rescue, difficulty rises with score.
-- **Game B** — faster and busier, and jumpers snag on the palms before dropping
-  again after a randomised delay.
+- **Game A** — classic rescue: catch parachutists for one point each; difficulty
+  rises with score (more jumpers, faster falls). Misses clear at **200** and
+  **500** points. Three misses end the game.
+- **Game B** — same rules, plus some jumpers snag on the palms and drop again
+  after a short delay.
 
 ## Deploy to Vercel
 
