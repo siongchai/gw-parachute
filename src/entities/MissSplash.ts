@@ -4,9 +4,9 @@ import type { SpriteManager } from "../game/SpriteManager";
 const LCD_W = 22;
 
 /** First miss-splash row — below the boat hull. */
-const TOP_Y = 100;
+const TOP_Y = 110;
 /** Second miss-splash row. */
-const BOTTOM_Y = 110;
+const BOTTOM_Y = 130;
 
 const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
   number,
