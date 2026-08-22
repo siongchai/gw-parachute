@@ -1,8 +1,8 @@
 import { Boat } from "../entities/Boat";
 import { Helicopter } from "../entities/Helicopter";
+import { MissSplash } from "../entities/MissSplash";
 import { PalmTree } from "../entities/PalmTree";
 import { Parachutist } from "../entities/Parachutist";
-import { Shark } from "../entities/Shark";
 import { CollisionManager } from "./CollisionManager";
 import { DifficultyManager } from "./DifficultyManager";
 import {
@@ -10,7 +10,6 @@ import {
   GAME_HEIGHT,
   GAME_WIDTH,
   HUD,
-  laneCenterX,
   MAX_MISSES,
   MISS_CLEAR_SCORES,
   BOAT,
@@ -59,7 +58,7 @@ export class GameEngine {
   private heli = new Helicopter();
   private palms = [new PalmTree("left"), new PalmTree("right")];
   private parachutists: Parachutist[] = [];
-  private sharks: Shark[] = [];
+  private missSplashes: MissSplash[] = [];
 
   private mode: GameMode = "A";
   private score = 0;
@@ -114,7 +113,7 @@ export class GameEngine {
     this.spawnTimer = 700;
     this.missFlashTimer = 0;
     this.parachutists = [];
-    this.sharks = [];
+    this.missSplashes = [];
     this.boat.reset();
     this.heli.reset();
     this.emit();
@@ -136,7 +135,7 @@ export class GameEngine {
     this.playing = false;
     this.paused = false;
     this.parachutists = [];
-    this.sharks = [];
+    this.missSplashes = [];
     this.emit();
   }
 
@@ -233,15 +232,21 @@ export class GameEngine {
       }
 
       if (wasLive && p.hasReachedWater()) {
-        p.splash();
-        this.registerMiss(p.lane);
+        p.markMissed();
+        this.beginMissSequence(p.lane);
       }
     }
 
     this.parachutists = this.parachutists.filter((p) => !p.remove);
 
-    for (const s of this.sharks) s.update(dt);
-    this.sharks = this.sharks.filter((s) => !s.remove);
+    for (const s of this.missSplashes) {
+      s.update(dt);
+      if (s.isComplete() && !s.registered) {
+        s.registered = true;
+        this.registerMiss();
+      }
+    }
+    this.missSplashes = this.missSplashes.filter((s) => !s.remove);
   }
 
   /**
@@ -273,14 +278,14 @@ export class GameEngine {
     p.stickOnPalm(delay, hang.x, hang.y);
   }
 
-  private registerMiss(lane: Lane): void {
-    const x = laneCenterX(lane);
+  private beginMissSequence(lane: Lane): void {
+    this.missSplashes.push(new MissSplash(lane));
+    this.callbacks.onMiss?.();
+  }
+
+  private registerMiss(): void {
     this.misses += 1;
     this.missFlashTimer = 900;
-    this.sharks.push(new Shark(x - 4, "attack", 4));
-    this.sharks.push(new Shark(x - 34, "fin", 12));
-    this.sharks.push(new Shark(x + 26, "fin", 16));
-    this.callbacks.onMiss?.();
 
     if (this.misses >= MAX_MISSES) {
       this.playing = false;
@@ -321,7 +326,7 @@ export class GameEngine {
     this.heli.render(ctx, this.sprites);
     for (const p of this.parachutists) p.render(ctx, this.sprites);
     this.boat.render(ctx, this.sprites);
-    for (const s of this.sharks) s.render(ctx, this.sprites);
+    for (const s of this.missSplashes) s.render(ctx, this.sprites);
 
     this.sprites.drawScore(ctx, this.score, HUD.scoreX, HUD.scoreY, HUD.digitAdvance);
 

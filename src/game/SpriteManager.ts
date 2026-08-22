@@ -52,10 +52,12 @@ export const SPRITE_MANIFEST = {
   hang_4: "parachutist/hang_4.png",
   hang_5: "parachutist/hang_5.png",
 
-  splash_0: "parachutist/splash_0.png",
-  splash_1: "parachutist/splash_1.png",
-  splash_2: "parachutist/splash_2.png",
-  splash_3: "parachutist/splash_3.png",
+  splash_0: "splash/splash_0.png",
+  splash_1: "splash/splash_1.png",
+  splash_2: "splash/splash_2.png",
+  splash_3: "splash/splash_3.png",
+  splash_4: "splash/splash_4.png",
+  splash_5: "splash/splash_5.png",
 
   boat_0: "boat/boat_0.png",
   boat_1: "boat/boat_1.png",
@@ -106,7 +108,7 @@ export type DrawOptions = {
 };
 
 const BASE_PATH = "/sprites/";
-const SPRITE_CACHE_BUST = "20260820-gamelabel-v3";
+const SPRITE_CACHE_BUST = "20260822-splash-v5";
 const HELICOPTER_HIRES = [
   "helicopter/heli_hires_0.png",
   "helicopter/heli_hires_1.png",
@@ -125,6 +127,15 @@ const MISS_LABEL_HIRES = "ui/label_miss_hires.png";
 const GAME_LABEL_HIRES = [
   "ui/label_game_a_hires.png",
   "ui/label_game_b_hires.png",
+] as const;
+
+const SPLASH_HIRES = [
+  "splash/splash_hires_0.png",
+  "splash/splash_hires_1.png",
+  "splash/splash_hires_2.png",
+  "splash/splash_hires_3.png",
+  "splash/splash_hires_4.png",
+  "splash/splash_hires_5.png",
 ] as const;
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
@@ -148,13 +159,14 @@ export class SpriteManager {
   private missIconHire: HTMLImageElement | null = null;
   private missLabelHire: HTMLImageElement | null = null;
   private gameLabelHires: (HTMLImageElement | null)[] = [];
+  private splashHires: (HTMLImageElement | null)[] = [];
   private ready = false;
 
   async init(): Promise<void> {
     if (typeof window === "undefined") return;
 
     const entries = Object.entries(SPRITE_MANIFEST) as [SpriteId, string][];
-    const [sprites, heliHires, boatHires, missIconHire, missLabelHire, gameLabelHires] =
+    const [sprites, heliHires, boatHires, missIconHire, missLabelHire, gameLabelHires, splashHires] =
       await Promise.all([
       Promise.all(
         entries.map(async ([id, file]) => {
@@ -179,6 +191,11 @@ export class SpriteManager {
           loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
         ),
       ),
+      Promise.all(
+        SPLASH_HIRES.map((file) =>
+          loadImage(`${BASE_PATH}${file}?v=${SPRITE_CACHE_BUST}`),
+        ),
+      ),
     ]);
 
     for (const [id, img] of sprites) {
@@ -195,6 +212,9 @@ export class SpriteManager {
     this.missLabelHire =
       missLabelHire.naturalWidth > 0 ? missLabelHire : null;
     this.gameLabelHires = gameLabelHires.map((img) =>
+      img.naturalWidth > 0 ? img : null,
+    );
+    this.splashHires = splashHires.map((img) =>
       img.naturalWidth > 0 ? img : null,
     );
     this.ready = true;
@@ -320,6 +340,28 @@ export class SpriteManager {
     h: number,
   ): void {
     const img = this.missLabelHire ?? this.images.get("label_miss");
+    if (!img?.naturalWidth) return;
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, x, y, w, h);
+    ctx.restore();
+  }
+
+  /** Miss splash + shark chase — smooth-scaled from hires sprites. */
+  drawMissSplash(
+    ctx: CanvasRenderingContext2D,
+    frame: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): void {
+    const idx = Math.max(0, Math.min(SPLASH_HIRES.length - 1, frame));
+    const hires = this.splashHires[idx];
+    const fallbackId = `splash_${idx}` as SpriteId;
+    const img = hires ?? this.images.get(fallbackId);
     if (!img?.naturalWidth) return;
 
     ctx.save();

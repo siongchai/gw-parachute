@@ -123,7 +123,6 @@ export type ParachutistState =
   | "SPAWNING"
   | "FALLING"
   | "CAUGHT"
-  | "SPLASHING"
   | "STUCK_ON_PALM";
 
 export type DifficultyTier = "Easy" | "Normal" | "Fast" | "Hard" | "Extreme";

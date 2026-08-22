@@ -16,14 +16,6 @@ const HANG_FRAMES: SpriteId[] = [
   "hang_4",
   "hang_5",
 ];
-const SPLASH_FRAMES: SpriteId[] = [
-  "splash_0",
-  "splash_1",
-  "splash_2",
-  "splash_3",
-];
-
-const SPLASH_MS = 520;
 
 let nextId = 1;
 
@@ -44,7 +36,6 @@ export class Parachutist {
   private catchHoldMs = 0;
 
   private stuckTimer = 0;
-  private splashTimer = 0;
   private hangFrame = 0;
 
   constructor(lane: Lane, fallSpeed: number) {
@@ -91,12 +82,6 @@ export class Parachutist {
   }
 
   update(dt: number): void {
-    if (this.state === "SPLASHING") {
-      this.splashTimer += dt;
-      if (this.splashTimer >= SPLASH_MS) this.remove = true;
-      return;
-    }
-
     if (this.state === "CAUGHT") {
       this.remove = true;
       return;
@@ -150,11 +135,8 @@ export class Parachutist {
     return this.isLive() && this.y + 22 >= WATER_Y + 4;
   }
 
-  splash(): void {
-    this.state = "SPLASHING";
-    this.splashTimer = 0;
-    this.y = WATER_Y - 6;
-    this.cx = parachutistXForLane(this.lane) + 9;
+  markMissed(): void {
+    this.remove = true;
   }
 
   stickOnPalm(delayMs: number, x: number, y: number): void {
@@ -171,17 +153,6 @@ export class Parachutist {
 
   render(ctx: CanvasRenderingContext2D, sprites: SpriteManager): void {
     if (this.state === "CAUGHT") return;
-
-    if (this.state === "SPLASHING") {
-      const i = Math.min(
-        SPLASH_FRAMES.length - 1,
-        Math.floor((this.splashTimer / SPLASH_MS) * SPLASH_FRAMES.length),
-      );
-      const id = SPLASH_FRAMES[i];
-      const { w } = sprites.size(id);
-      sprites.draw(ctx, id, this.cx - w / 2, this.y);
-      return;
-    }
 
     if (this.state === "STUCK_ON_PALM") {
       const { w } = sprites.size(HANG_FRAMES[this.hangFrame]);

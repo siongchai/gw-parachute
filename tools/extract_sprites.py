@@ -218,8 +218,11 @@ def main():
         save(extract(b, height=20), "parachutist", f"spin_{i}")
     for i, b in enumerate(PALM_HANG):
         save(extract(b, width=20), "parachutist", f"hang_{i}")
-    for i, b in enumerate(SPLASH):
-        save(extract(b, width=22), "parachutist", f"splash_{i}")
+
+    print("miss splash")
+    from extract_splash import main as extract_splash_frames
+
+    extract_splash_frames()
 
     print("boat")
     from extract_boatman import main as extract_boatman_frames
