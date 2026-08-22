@@ -1,12 +1,12 @@
-import { LANES, type Lane } from "../game/GameConfig";
+import { BOAT, LANES, type Lane } from "../game/GameConfig";
 import type { SpriteManager } from "../game/SpriteManager";
 
 const LCD_W = 22;
 
-/** Top / bottom water rows under the boat (LCD mockup.jpg). */
-const TOP_Y = 67;
-/** Second miss-splash row — sits just above the waterline (WATER_Y = 79). */
-const BOTTOM_Y = 78;
+/** First miss-splash row — directly below the boat hull. */
+const TOP_Y = BOAT.y + BOAT.height + 1;
+/** Second miss-splash row — one LCD step below the first. */
+const BOTTOM_Y = TOP_Y + 7;
 
 const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
   number,
@@ -28,7 +28,7 @@ const FRAMES = [
   { sprite: 5, w: LCD_W, h: 19, x: LANE_X[2], y: BOTTOM_Y },
 ] as const;
 
-export const MISS_SPLASH_FRAME_MS = 250;
+export const MISS_SPLASH_FRAME_MS = 500;
 export const MISS_SPLASH_MS = MISS_SPLASH_FRAME_MS * FRAMES.length;
 
 export class MissSplash {
