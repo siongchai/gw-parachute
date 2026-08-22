@@ -30,7 +30,8 @@ def lane_x(idx):
     return round(LANE_CX[idx] - LCD_W / 2)
 
 
-# Two-lane grid from LCD mockup (see user layout).
+# Spatial slots from LCD mockup (sprite index = column in splash.png).
+# Runtime animation plays right→left on top, then left→right on bottom.
 MOCKUP_PATH = [
     {"lane": 0, "y": TOP_Y, "label": "splash 1 top-left"},
     {"lane": 1, "y": TOP_Y, "label": "splash 2 top-center"},
