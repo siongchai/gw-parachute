@@ -15,16 +15,16 @@ const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
 
 /**
  * Two-lane miss path (LCD mockup), played right→left on top then left→right on bottom:
- *   Top:    splash 3 right · splash 2 center · splash 1 left
- *   Bottom: splash 6 left · splash 5 center · splash 4 right
+ *   Top:    splash 1 right · splash 2 center · splash 3 left
+ *   Bottom: splash 4 left · splash 5 center · splash 6 right
  */
 const FRAMES = [
-  { sprite: 2, w: LCD_W, h: 22, x: LANE_X[2], y: TOP_Y },
+  { sprite: 0, w: LCD_W, h: 27, x: LANE_X[2], y: TOP_Y },
   { sprite: 1, w: LCD_W, h: 23, x: LANE_X[1], y: TOP_Y },
-  { sprite: 0, w: LCD_W, h: 27, x: LANE_X[0], y: TOP_Y },
-  { sprite: 5, w: LCD_W, h: 19, x: LANE_X[0], y: BOTTOM_Y },
+  { sprite: 2, w: LCD_W, h: 22, x: LANE_X[0], y: TOP_Y },
+  { sprite: 3, w: LCD_W, h: 22, x: LANE_X[0], y: BOTTOM_Y },
   { sprite: 4, w: LCD_W, h: 24, x: LANE_X[1], y: BOTTOM_Y },
-  { sprite: 3, w: LCD_W, h: 22, x: LANE_X[2], y: BOTTOM_Y },
+  { sprite: 5, w: LCD_W, h: 19, x: LANE_X[2], y: BOTTOM_Y },
 ] as const;
 
 export const MISS_SPLASH_FRAME_MS = 150;

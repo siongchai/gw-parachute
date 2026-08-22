@@ -4,10 +4,10 @@
       "frame": 0,
       "w": 22,
       "h": 27,
-      "x": 37,
+      "x": 105,
       "y": 67,
-      "lane": 0,
-      "label": "splash 1 top-left"
+      "lane": 2,
+      "label": "splash 1 top-right"
     },
     {
       "frame": 1,
@@ -22,19 +22,19 @@
       "frame": 2,
       "w": 22,
       "h": 22,
-      "x": 105,
+      "x": 37,
       "y": 67,
-      "lane": 2,
-      "label": "splash 3 top-right"
+      "lane": 0,
+      "label": "splash 3 top-left"
     },
     {
       "frame": 3,
       "w": 22,
       "h": 22,
-      "x": 105,
+      "x": 37,
       "y": 74,
-      "lane": 2,
-      "label": "splash 4 bottom-right"
+      "lane": 0,
+      "label": "splash 4 bottom-left"
     },
     {
       "frame": 4,
@@ -49,10 +49,10 @@
       "frame": 5,
       "w": 22,
       "h": 19,
-      "x": 37,
+      "x": 105,
       "y": 74,
-      "lane": 0,
-      "label": "splash 6 bottom-left"
+      "lane": 2,
+      "label": "splash 6 bottom-right"
     }
   ]
 }

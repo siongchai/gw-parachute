@@ -33,12 +33,12 @@ def lane_x(idx):
 # Spatial slots from LCD mockup (sprite index = column in splash.png).
 # Runtime animation plays right→left on top, then left→right on bottom.
 MOCKUP_PATH = [
-    {"lane": 0, "y": TOP_Y, "label": "splash 1 top-left"},
+    {"lane": 2, "y": TOP_Y, "label": "splash 1 top-right"},
     {"lane": 1, "y": TOP_Y, "label": "splash 2 top-center"},
-    {"lane": 2, "y": TOP_Y, "label": "splash 3 top-right"},
-    {"lane": 2, "y": BOTTOM_Y, "label": "splash 4 bottom-right"},
+    {"lane": 0, "y": TOP_Y, "label": "splash 3 top-left"},
+    {"lane": 0, "y": BOTTOM_Y, "label": "splash 4 bottom-left"},
     {"lane": 1, "y": BOTTOM_Y, "label": "splash 5 bottom-center"},
-    {"lane": 0, "y": BOTTOM_Y, "label": "splash 6 bottom-left"},
+    {"lane": 2, "y": BOTTOM_Y, "label": "splash 6 bottom-right"},
 ]
 
 
@@ -112,12 +112,12 @@ def measure_mockup_path():
     bot_y = min(bot_tops) if bot_tops else BOTTOM_Y
 
     return [
-        {"lane": 0, "y": top_y, "label": "splash 1 top-left"},
+        {"lane": 2, "y": top_y, "label": "splash 1 top-right"},
         {"lane": 1, "y": top_y, "label": "splash 2 top-center"},
-        {"lane": 2, "y": top_y, "label": "splash 3 top-right"},
-        {"lane": 2, "y": bot_y, "label": "splash 4 bottom-right"},
+        {"lane": 0, "y": top_y, "label": "splash 3 top-left"},
+        {"lane": 0, "y": bot_y, "label": "splash 4 bottom-left"},
         {"lane": 1, "y": bot_y, "label": "splash 5 bottom-center"},
-        {"lane": 0, "y": bot_y, "label": "splash 6 bottom-left"},
+        {"lane": 2, "y": bot_y, "label": "splash 6 bottom-right"},
     ]
 
 
