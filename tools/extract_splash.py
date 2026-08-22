@@ -161,6 +161,75 @@ def downsample_hires(crop, target_w, target_h):
     return out
 
 
+def clean_ink(im):
+    """Transparent background, black LCD ink silhouette."""
+    px = im.load()
+    w, h = im.size
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    op = out.load()
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a < 40:
+                continue
+            l = lum(r, g, b)
+            if l >= INK_CUT:
+                continue
+            ink = min(255, int(a * (INK_CUT - l) / INK_CUT))
+            if ink > 8:
+                op[x, y] = (0, 0, 0, ink)
+    return out
+
+
+def hires_size(crop_w, crop_h):
+    lcd_h = max(1, round(crop_h * LCD_W / crop_w))
+    return LCD_W * HIRES_SCALE, lcd_h * HIRES_SCALE
+
+
+def root_source_path(index):
+    """Per-frame LCD mockup overlay, e.g. `splash 0.png`."""
+    path = os.path.join(ROOT, f"splash {index}.png")
+    return path if os.path.isfile(path) else None
+
+
+def extract_overlay(index: int) -> tuple[Image.Image, int, int, int]:
+    """Crop sprite ink from a full-canvas mockup overlay; keep hi-res size."""
+    src_path = root_source_path(index)
+    if not src_path:
+        raise FileNotFoundError(f"Missing overlay: splash {index}.png")
+    src = Image.open(src_path).convert("RGBA")
+    w, h = src.size
+    if w > LCD_W * 4 or h > LCD_W * 4:
+        minx, miny, maxx, maxy = content_bbox(src)
+        src = src.crop((minx, miny, maxx + 1, maxy + 1))
+    clean = clean_ink(src)
+    cw, ch = clean.size
+    lcd_h = max(1, round(ch * LCD_W / cw))
+    return clean, cw, ch, lcd_h
+
+
+def rebuild_hires_from_source(index: int) -> tuple[int, int]:
+    """Extract sprite ink from splash_N.png or root overlay → splash_hires_N.png."""
+    overlay = root_source_path(index)
+    if overlay:
+        clean, cw, ch, _ = extract_overlay(index)
+    else:
+        src_path = os.path.join(OUT, f"splash_{index}.png")
+        if not os.path.isfile(src_path):
+            raise FileNotFoundError(f"Missing hi-res source: {src_path}")
+        src = Image.open(src_path).convert("RGBA")
+        w, h = src.size
+        if w > LCD_W * 4 or h > LCD_W * 4:
+            minx, miny, maxx, maxy = content_bbox(src)
+            src = src.crop((minx, miny, maxx + 1, maxy + 1))
+        clean = clean_ink(src)
+        cw, ch = clean.size
+    hires_path = os.path.join(OUT, f"splash_hires_{index}.png")
+    clean.save(hires_path)
+    clean.save(os.path.join(OUT, f"splash_{index}.png"))
+    return cw, ch
+
+
 def main():
     if not os.path.isfile(SRC):
         raise FileNotFoundError(f"Missing source: {SRC}")
@@ -173,22 +242,29 @@ def main():
 
     print("miss splash (6 frames, 2-lane LCD mockup grid)")
     for i in range(6):
-        col = sheet.crop((i * col_w, 0, (i + 1) * col_w, sheet.height))
-        box = content_bbox(col)
-        crop = col.crop((box[0], box[1], box[2] + 1, box[3] + 1))
-        cw, ch = crop.size
-        lcd_h = max(1, round(ch * LCD_W / cw))
-        hires_w, hires_h = LCD_W * HIRES_SCALE, lcd_h * HIRES_SCALE
-
-        lcd = downsample_lcd(crop, LCD_W, lcd_h)
-        hires = downsample_hires(crop, hires_w, hires_h)
-        lcd.save(os.path.join(OUT, f"splash_{i}.png"))
-        hires.save(os.path.join(OUT, f"splash_hires_{i}.png"))
-
         slot = path[i]
         lane = slot["lane"]
         y = slot["y"]
         x = lane_x(lane)
+
+        if root_source_path(i):
+            clean, cw, ch, lcd_h = extract_overlay(i)
+            clean.save(os.path.join(OUT, f"splash_{i}.png"))
+            clean.save(os.path.join(OUT, f"splash_hires_{i}.png"))
+            hires_w, hires_h = cw, ch
+            source = f"splash {i}.png"
+        else:
+            col = sheet.crop((i * col_w, 0, (i + 1) * col_w, sheet.height))
+            box = content_bbox(col)
+            crop = col.crop((box[0], box[1], box[2] + 1, box[3] + 1))
+            cw, ch = crop.size
+            lcd_h = max(1, round(ch * LCD_W / cw))
+            hires_w, hires_h = hires_size(cw, ch)
+            crop.save(os.path.join(OUT, f"splash_{i}.png"))
+            hires = downsample_hires(crop, hires_w, hires_h)
+            hires.save(os.path.join(OUT, f"splash_hires_{i}.png"))
+            source = "splash.png"
+
         entry = {
             "frame": i,
             "w": LCD_W,
@@ -197,9 +273,15 @@ def main():
             "y": y,
             "lane": lane,
             "label": slot["label"],
+            "source": source,
+            "sourceSize": [cw, ch],
+            "hiresSize": [hires_w, hires_h],
         }
         meta.append(entry)
-        print(f"  splash_{i}.png {LCD_W}×{lcd_h} @ ({x},{y}) {slot['label']}")
+        print(
+            f"  [{source}] splash_{i}.png {cw}×{ch} → splash_hires_{i}.png {hires_w}×{hires_h} "
+            f"@ ({x},{y}) lcd {LCD_W}×{lcd_h} {slot['label']}"
+        )
 
     meta_path = os.path.join(OUT, "splash_meta.json")
     with open(meta_path, "w", encoding="utf-8") as fh:

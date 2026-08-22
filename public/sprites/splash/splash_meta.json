@@ -3,56 +3,110 @@
     {
       "frame": 0,
       "w": 22,
-      "h": 27,
+      "h": 9,
       "x": 105,
       "y": 67,
       "lane": 2,
-      "label": "splash 1 top-right"
+      "label": "splash 1 top-right",
+      "source": "splash 0.png",
+      "sourceSize": [
+        413,
+        167
+      ],
+      "hiresSize": [
+        413,
+        167
+      ]
     },
     {
       "frame": 1,
       "w": 22,
-      "h": 23,
+      "h": 6,
       "x": 71,
       "y": 67,
       "lane": 1,
-      "label": "splash 2 top-center"
+      "label": "splash 2 top-center",
+      "source": "splash 1.png",
+      "sourceSize": [
+        607,
+        179
+      ],
+      "hiresSize": [
+        607,
+        179
+      ]
     },
     {
       "frame": 2,
       "w": 22,
-      "h": 22,
+      "h": 8,
       "x": 37,
       "y": 67,
       "lane": 0,
-      "label": "splash 3 top-left"
+      "label": "splash 3 top-left",
+      "source": "splash 2.png",
+      "sourceSize": [
+        556,
+        209
+      ],
+      "hiresSize": [
+        556,
+        209
+      ]
     },
     {
       "frame": 3,
       "w": 22,
-      "h": 22,
+      "h": 6,
       "x": 37,
       "y": 74,
       "lane": 0,
-      "label": "splash 4 bottom-left"
+      "label": "splash 4 bottom-left",
+      "source": "splash 3.png",
+      "sourceSize": [
+        597,
+        151
+      ],
+      "hiresSize": [
+        597,
+        151
+      ]
     },
     {
       "frame": 4,
       "w": 22,
-      "h": 24,
+      "h": 7,
       "x": 71,
       "y": 74,
       "lane": 1,
-      "label": "splash 5 bottom-center"
+      "label": "splash 5 bottom-center",
+      "source": "splash 4.png",
+      "sourceSize": [
+        531,
+        167
+      ],
+      "hiresSize": [
+        531,
+        167
+      ]
     },
     {
       "frame": 5,
       "w": 22,
-      "h": 19,
+      "h": 8,
       "x": 105,
       "y": 74,
       "lane": 2,
-      "label": "splash 6 bottom-right"
+      "label": "splash 6 bottom-right",
+      "source": "splash 5.png",
+      "sourceSize": [
+        778,
+        297
+      ],
+      "hiresSize": [
+        778,
+        297
+      ]
     }
   ]
 }

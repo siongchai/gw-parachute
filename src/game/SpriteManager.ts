@@ -108,7 +108,7 @@ export type DrawOptions = {
 };
 
 const BASE_PATH = "/sprites/";
-const SPRITE_CACHE_BUST = "20260822-splash-v5";
+const SPRITE_CACHE_BUST = "20260822-splash-v16";
 const HELICOPTER_HIRES = [
   "helicopter/heli_hires_0.png",
   "helicopter/heli_hires_1.png",
