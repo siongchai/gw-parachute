@@ -22,8 +22,8 @@ GAME_W = 164
 GAME_H = 108
 LANE_CX = [48, 82, 116]
 LCD_W = 22
-TOP_Y = 86
-BOTTOM_Y = 93
+TOP_Y = 90
+BOTTOM_Y = 100
 
 
 def lane_x(idx):
@@ -106,8 +106,8 @@ def measure_mockup_path():
             tops.append(round(best) if best is not None else y_game_lo)
         return tops
 
-    top_tops = row_top(67, 74)
-    bot_tops = row_top(74, 82)
+    top_tops = row_top(TOP_Y, BOTTOM_Y)
+    bot_tops = row_top(BOTTOM_Y, BOTTOM_Y + 8)
     top_y = min(top_tops) if top_tops else TOP_Y
     bot_y = min(bot_tops) if bot_tops else BOTTOM_Y
 

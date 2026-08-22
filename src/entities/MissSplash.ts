@@ -1,12 +1,12 @@
-import { BOAT, LANES, type Lane } from "../game/GameConfig";
+import { LANES, type Lane } from "../game/GameConfig";
 import type { SpriteManager } from "../game/SpriteManager";
 
 const LCD_W = 22;
 
-/** First miss-splash row — directly below the boat hull. */
-const TOP_Y = BOAT.y + BOAT.height + 1;
-/** Second miss-splash row — one LCD step below the first. */
-const BOTTOM_Y = TOP_Y + 7;
+/** First miss-splash row — below the boat hull. */
+const TOP_Y = 90;
+/** Second miss-splash row. */
+const BOTTOM_Y = 100;
 
 const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
   number,
