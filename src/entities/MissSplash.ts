@@ -3,9 +3,10 @@ import type { SpriteManager } from "../game/SpriteManager";
 
 const LCD_W = 22;
 
-/** Top / bottom water rows under the boat (LCD mockup.jpg). */
-const TOP_Y = 67;
-const BOTTOM_Y = 74;
+/** First miss-splash row — below the boat hull. */
+const TOP_Y = 110;
+/** Second miss-splash row. */
+const BOTTOM_Y = 130;
 
 const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
   number,
@@ -27,7 +28,7 @@ const FRAMES = [
   { sprite: 5, w: LCD_W, h: 19, x: LANE_X[2], y: BOTTOM_Y },
 ] as const;
 
-export const MISS_SPLASH_FRAME_MS = 150;
+export const MISS_SPLASH_FRAME_MS = 750;
 export const MISS_SPLASH_MS = MISS_SPLASH_FRAME_MS * FRAMES.length;
 
 export class MissSplash {
