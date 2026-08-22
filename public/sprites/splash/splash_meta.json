@@ -32,7 +32,7 @@
       "w": 22,
       "h": 22,
       "x": 37,
-      "y": 74,
+      "y": 78,
       "lane": 0,
       "label": "splash 4 bottom-left"
     },
@@ -41,7 +41,7 @@
       "w": 22,
       "h": 24,
       "x": 71,
-      "y": 74,
+      "y": 78,
       "lane": 1,
       "label": "splash 5 bottom-center"
     },
@@ -50,7 +50,7 @@
       "w": 22,
       "h": 19,
       "x": 105,
-      "y": 74,
+      "y": 78,
       "lane": 2,
       "label": "splash 6 bottom-right"
     }

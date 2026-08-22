@@ -23,7 +23,7 @@ GAME_H = 108
 LANE_CX = [48, 82, 116]
 LCD_W = 22
 TOP_Y = 67
-BOTTOM_Y = 74
+BOTTOM_Y = 78
 
 
 def lane_x(idx):

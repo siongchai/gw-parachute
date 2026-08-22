@@ -5,7 +5,8 @@ const LCD_W = 22;
 
 /** Top / bottom water rows under the boat (LCD mockup.jpg). */
 const TOP_Y = 67;
-const BOTTOM_Y = 74;
+/** Second miss-splash row — sits just above the waterline (WATER_Y = 79). */
+const BOTTOM_Y = 78;
 
 const LANE_X = LANES.centers.map((cx) => cx - LCD_W / 2) as [
   number,
@@ -27,7 +28,7 @@ const FRAMES = [
   { sprite: 5, w: LCD_W, h: 19, x: LANE_X[2], y: BOTTOM_Y },
 ] as const;
 
-export const MISS_SPLASH_FRAME_MS = 150;
+export const MISS_SPLASH_FRAME_MS = 250;
 export const MISS_SPLASH_MS = MISS_SPLASH_FRAME_MS * FRAMES.length;
 
 export class MissSplash {
